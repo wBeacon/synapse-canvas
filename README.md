@@ -39,6 +39,10 @@ corepack pnpm test
 - [架构与边界](docs/architecture.md)
 - [开发与发布](docs/development.md)
 
+本项目的适配验证记录：
+
+- [WorkBuddy 首轮能力验证](docs/workbuddy-validation.md)
+
 ## 许可证
 
 [MIT](LICENSE)。保留原项目的版权与许可声明。
