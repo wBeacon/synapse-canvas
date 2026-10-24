@@ -6,9 +6,13 @@
 
 本项目基于 [liangmianya/dsh-synapse](https://github.com/liangmianya/dsh-synapse) 开发，感谢原作者 liangmianya 的设计、实现与支持。
 
+本项目的初始代码，包括对话地图与画布交互、DSH 会话接入与事件投影、布局存储、测试及相关文档，继承自 dsh-synapse。感谢原作者及上游贡献者完成这些基础工作，并感谢原作者支持 CodeBuddy / WorkBuddy 适配方向。
+
 Synapse Canvas 是独立维护的衍生项目，保留上游提交历史和 MIT 许可证。原项目贡献归原作者及相应贡献者所有，后续开发与发布由本项目维护者负责。
 
 导入基线：dsh-synapse `0.5.0`，提交 `265d7ff1f41c87e41f5648166e410cbf972c417f`。
+
+详细来源与贡献边界见 [NOTICE](NOTICE)，原有版权与许可声明见 [LICENSE](LICENSE)。
 
 ## 当前状态
 

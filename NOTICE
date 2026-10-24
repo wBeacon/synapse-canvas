@@ -1,0 +1,25 @@
+Synapse Canvas — upstream attribution
+
+This project is derived from dsh-synapse.
+
+Original project: dsh-synapse
+Original author: liangmianya, with contributions from the upstream contributors
+Source: https://github.com/liangmianya/dsh-synapse
+Imported version: 0.5.0
+Imported commit: 265d7ff1f41c87e41f5648166e410cbf972c417f
+Upstream license: MIT
+
+The initial conversation canvas, DSH integration, session-event projection,
+layout persistence, tests, and documentation were inherited from dsh-synapse.
+The upstream Git history is retained to preserve individual contribution records.
+
+Synapse Canvas is an independently maintained derivative. Multi-harness support
+and CodeBuddy / WorkBuddy integration are planned work, rather than capabilities
+already provided by the imported baseline.
+
+We thank liangmianya and the upstream contributors for their work, and
+liangmianya for supporting the CodeBuddy / WorkBuddy adaptation direction.
+
+The original copyright notice and MIT license terms are retained in LICENSE.
+The additional copyright notice applies to contributions made to this derivative
+and does not replace attribution for the inherited work.
