@@ -16,9 +16,22 @@ Synapse Canvas 是独立维护的衍生项目，保留上游提交历史和 MIT 
 
 ## 当前状态
 
-当前代码保留上游的 DSH 插件实现。公共核心解耦及 CodeBuddy / WorkBuddy 适配尚未完成；项目名称和规划不代表这些平台已获得支持。
+当前包含上游 DSH 插件和首版 **WorkBuddy 本地会话只读地图**。已开始提取公共会话模型与平台事件适配边界；CodeBuddy 尚未接入，WorkBuddy 的消息发送、原生分叉及应用内嵌入尚未支持。
 
 现有包配置仍使用上游名称 `dsh-synapse`，独立包名和发布流程将在后续开发中调整。
+
+## WorkBuddy 只读地图
+
+需要 Node.js `>= 22.19.0` 和本机 WorkBuddy 历史。使用已有测试任务启动：
+
+```sh
+npm run preview:workbuddy -- --marker SYNAPSE_CANVAS_PROBE_20261025
+```
+
+打开终端输出的完整预览链接。地图支持会话和工作区筛选、按标题或问题搜索、卡片拖动、平移缩放、详情查看，以及每两秒刷新已保存的记录。
+默认只读取带指定标记的有效本地会话；其他读取范围及限制见[使用说明](docs/workbuddy-preview.md)。
+
+![WorkBuddy 测试会话的只读地图](docs/images/workbuddy-readonly-preview.png)
 
 ## 开发
 
@@ -42,6 +55,8 @@ corepack pnpm test
 本项目的适配验证记录：
 
 - [WorkBuddy 首轮能力验证](docs/workbuddy-validation.md)
+- [WorkBuddy 只读地图使用说明](docs/workbuddy-preview.md)
+- [公共模型与适配边界](docs/multi-harness-architecture.md)
 
 ## 许可证
 

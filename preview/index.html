@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Synapse Canvas · WorkBuddy</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/preview.css">
+</head>
+<body>
+  <main class="synapse-shell">
+    <aside class="sidebar">
+      <div class="preview-brand">Synapse <span>Canvas</span></div>
+      <div class="preview-source">WorkBuddy <span class="readonly-badge">只读预览</span></div>
+      <label class="preview-search">搜索会话<input id="search" type="search" placeholder="搜索标题或问题"></label>
+      <label class="preview-search">工作区<select id="workspace" aria-label="选择工作区"><option value="">全部工作区</option></select></label>
+      <div class="sidebar-heading">会话</div>
+      <nav id="sessions" class="thread-tree" aria-label="会话列表"></nav>
+      <p class="preview-footnote">历史来自 WorkBuddy。拖拽和缩放只调整当前地图视图。</p>
+    </aside>
+    <header class="topbar">
+      <div><strong id="heading">会话地图</strong><span id="count" class="preview-count"></span></div>
+      <div class="top-actions"><span id="sync" role="status">正在读取</span><button id="refresh">刷新</button></div>
+    </header>
+    <section class="preview-main">
+      <div id="notice" role="status" hidden></div>
+      <div class="preview-toolbar"><span>每张卡片是一轮对话</span><div><button id="fit">定位</button><button id="zoom-out" aria-label="缩小">−</button><span id="zoom">100%</span><button id="zoom-in" aria-label="放大">+</button></div></div>
+      <div id="viewport" class="canvas-viewport" tabindex="0" aria-label="对话画布，可拖拽平移">
+        <div id="world"><svg id="edges" aria-hidden="true"></svg><div id="cards"></div></div>
+        <div id="empty" hidden>当前范围没有可显示的对话</div>
+      </div>
+    </section>
+  </main>
+  <dialog id="detail" aria-labelledby="detail-title"><header><h2 id="detail-title">对话详情</h2><button id="close-detail">关闭</button></header><div id="detail-body"></div></dialog>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

@@ -7,6 +7,7 @@
   "exports": {
     ".": "./index.js",
     "./client": "./client.js",
+    "./core/conversation": "./core/conversation.js",
     "./cordis.patch.yml": "./cordis.patch.yml",
     "./package.json": "./package.json"
   },
@@ -20,10 +21,14 @@
     "cordis.patch.yml",
     "README.md",
     "LICENSE",
-    "NOTICE"
+    "NOTICE",
+    "core",
+    "adapters",
+    "preview"
   ],
   "scripts": {
-    "build": "node --check index.js && node --check client.js && node --check app.js",
+    "build": "node --check index.js && node --check client.js && node --check app.js && node --check core/conversation.js && node --check adapters/dsh.js && node --check adapters/workbuddy.js && node --check preview/server.js && node --check preview/app.js",
+    "preview:workbuddy": "node preview/server.js",
     "prepare": "pnpm run build",
     "test": "node --test test/*.test.js"
   },

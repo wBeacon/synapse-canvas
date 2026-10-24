@@ -68,6 +68,8 @@ python3 -m unittest discover -s tools -p 'test_workbuddy_probe.py'
 
 ## 下一步
 
+更新：只读地图及首版公共模型已实现，见[使用说明](workbuddy-preview.md)与[适配边界](multi-harness-architecture.md)。以下为首轮验证时确定的推进顺序；发送、原生分叉和嵌入能力仍待验证。
+
 1. 在一个受限于当前账号和有效会话的只读原型中，将历史事件转换为平台无关的会话、轮次和工具记录；处理继承历史、重复记录和注入消息。
 2. 用 DSH 与 WorkBuddy 的实际数据结构确定首版公共模型，保留原生 ID 及消息锚点，避免把 DSH 的事件序号直接套用到 WorkBuddy。
 3. 单独验证第三方发送、原生分叉与界面承载方式，再决定完整适配路径。未验证操作保持不可用；无需等待这些操作即可推进只读地图。
