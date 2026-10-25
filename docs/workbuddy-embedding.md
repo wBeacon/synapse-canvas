@@ -2,6 +2,8 @@
 
 2026-10-25，已在 macOS WorkBuddy 5.9.2 企业版中实际加载 Synapse Canvas MCP App。画布显示在任务对话内，可激活交互、搜索、缩放、查看详情，并通过 MCP 资源每两秒刷新已保存的历史。
 
+**当前仅为对话内嵌入，尚未完成应用级常驻。** 没有独立导航入口，也未验证跨任务保持、脱离工具消息打开或重启恢复。连接器配置持久存在不等于画布界面常驻。
+
 ![WorkBuddy 任务内的 Synapse Canvas](images/workbuddy-embedded-preview.png)
 
 截图仅包含专用测试任务，已裁去宿主的私人项目侧栏。
@@ -59,3 +61,12 @@ pnpm run build
 - 不修改 WorkBuddy 安装包或历史数据库；宿主消息仅由明确的用户点击触发。没有开放源会话写入工具。
 
 历史解析限制沿用[只读地图说明](workbuddy-preview.md)。这里的结果仅证明当前 WorkBuddy 版本的实际行为，CodeBuddy 仍需单独验证。
+
+## 正式安装与应用级常驻调查
+
+2026-10-25 补充核查：
+
+- WorkBuddy 的公开[插件说明](https://www.codebuddy.cn/docs/workbuddy/From-Beginner-to-Expert-Guide/Function-Description/Plug-In)列出 Skills、MCP、快捷指令、Hooks、Agents，未列出注册自定义导航页面的组件。按[连接器规范](https://open.workbuddy.cn/docs/connector)打包可以改善分发与安装，不能据此承诺常驻界面。
+- [Buddy 应用文档](https://open.workbuddy.cn/docs/buddy-app)提供行业工作台配置及 MCP Apps 集成，但尚未确认可注册任意自定义常驻画布。它不等同于普通本地插件安装。
+- 本机内置扩展清单确有 `extension.json`、`ui.entry`，部分页面含 `keepAlive`。安装包运行时代码还包含 `.wbext` 分发、完整性验证和受信任签名检查。这些是对当前版本的只读静态观察，未证明第三方开发者拥有同样的接入权限或支持契约；没有修改安装包、签名校验或运行配置。
+- 下一步应向 WorkBuddy 官方确认第三方 UI Extension SDK、独立导航入口、跨任务生命周期、本地开发加载方式，以及 `.wbext` 签名与分发渠道。获得可用契约后再做最小常驻页面实验；不能将 MCP 插件安装成功当作此项验收通过。

@@ -22,7 +22,7 @@ Synapse Canvas 是独立维护的衍生项目，保留上游提交历史和 MIT 
 
 ## WorkBuddy 内嵌画布
 
-已在 macOS WorkBuddy 5.9.2 企业版验证。安装依赖并构建后，将 [MCP 配置示例](mcp/config.example.json)中的路径改为本机绝对路径，在 WorkBuddy 自定义连接器中保存、信任并启用，然后调用 `show_canvas`。
+已在 macOS WorkBuddy 5.9.2 企业版验证对话内 MCP App；尚未实现独立导航入口、跨任务常驻或启动恢复。安装依赖并构建后，将 [MCP 配置示例](mcp/config.example.json)中的路径改为本机绝对路径，在 WorkBuddy 自定义连接器中保存、信任并启用，然后调用 `show_canvas`。
 
 详细步骤及能力边界见[应用内嵌入说明](docs/workbuddy-embedding.md)。
 
