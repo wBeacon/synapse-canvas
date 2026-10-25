@@ -1,5 +1,7 @@
 # Architecture and runtime boundaries
 
+This document describes the inherited DSH implementation. For the new shared model and WorkBuddy read-only preview, see [development plan](development-plan.md).
+
 ## Purpose
 
 `dsh-synapse` is a presentation and organization layer for DeepSeek Harness conversations. It turns existing DSH sessions, turns, and forks into a visual map without replacing the systems that own those conversations.

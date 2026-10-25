@@ -7,6 +7,7 @@
   "exports": {
     ".": "./index.js",
     "./client": "./client.js",
+    "./core/conversation": "./core/conversation.js",
     "./cordis.patch.yml": "./cordis.patch.yml",
     "./package.json": "./package.json"
   },
@@ -20,12 +21,19 @@
     "cordis.patch.yml",
     "README.md",
     "LICENSE",
-    "NOTICE"
+    "NOTICE",
+    "core",
+    "adapters",
+    "preview",
+    "mcp"
   ],
   "scripts": {
-    "build": "node --check index.js && node --check client.js && node --check app.js",
+    "build": "node --check index.js && node --check client.js && node --check app.js && node --check core/conversation.js && node --check core/read-only-payload.js && node --check adapters/dsh.js && node --check adapters/workbuddy.js && node --check preview/server.js && node --check preview/app.js && node --check preview/view.js && node --check mcp/server.js && node --check mcp/app.js && node mcp/build-widget.js",
+    "mcp:workbuddy": "node mcp/server.js",
+    "preview:workbuddy": "node preview/server.js",
     "prepare": "pnpm run build",
-    "test": "node --test test/*.test.js"
+    "test": "node --test test/*.test.js",
+    "buddy:package": "node buddy/build-page.js && python3 tools/package_buddy_page.py"
   },
   "engines": {
     "node": ">=22.19.0"
@@ -45,5 +53,12 @@
       ],
       "immediately": false
     }
+  },
+  "dependencies": {
+    "@modelcontextprotocol/ext-apps": "1.7.5",
+    "@modelcontextprotocol/sdk": "1.32.2"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
   }
 }

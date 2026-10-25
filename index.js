@@ -1,3 +1,4 @@
+import { normalizeDshEvent, eventBody, errorText, isInjectedUserMessage, contentText } from './adapters/dsh.js'
 import { copyFile, mkdir, readFile, rename, stat, unlink, writeFile } from 'node:fs/promises'
 import { randomUUID } from 'node:crypto'
 import { dirname } from 'node:path'
@@ -21,16 +22,6 @@ const MAX_BODY_CHARS = 200_000
 const PROJECTION_TRUNCATED_SUFFIX = '\n——…（详情查看全文）'
 const BODY_TRUNCATED_SUFFIX = '\n——…（正文过长，其余请在 DSH 中查看）'
 const TOPIC_COLORS = ['#0f766e', '#2563eb', '#be123c', '#7c3aed', '#b45309']
-// The harness writes `user/message` rows of its own (runtime snapshots, skill
-// catalogues). A canvas card must stand for a turn a person actually typed, so
-// an injected row is recognised by its structured `source.kind` instead of by
-// guessing at the prose (issue #31 / #23).
-const INJECTED_USER_SOURCE_KINDS = new Set(['skill-catalog'])
-// Stored projections keep no raw event to re-read, so the one-time cleanup
-// recognises a legacy catalogue card by the markers only that injection emits:
-// the `<system-reminder>` opener plus the `<available_skills>` index it wraps.
-const SKILL_CATALOG_OPENER = '<system-reminder>'
-const SKILL_CATALOG_MARKER = '<available_skills>'
 const LOCK_STALE_MS = 60_000
 // Deferred (event-projection) writes coalesce into one save per window, so a
 // burst of session events costs a single full-state write instead of one per
@@ -723,49 +714,10 @@ function requiredText(value, maxLength, field) {
   return text
 }
 
-/** Event → canvas message kind, or null when the event is not a message. */
-function eventKind(event) {
-  switch (event?.type) {
-    case 'user/message': return 'user'
-    case 'assistant/message': return 'assistant'
-    case 'todo/write': return 'todo'
-    case 'turn/end': {
-      const reason = event.data?.reason
-      if (reason?.kind === 'error') return 'error'
-      if (reason?.kind === 'cancelled' || reason?.kind === 'canceled' || reason?.kind === 'aborted') return 'error'
-      return null
-    }
-    default:
-      return /(?:error|failed|failure|cancel(?:led)?|abort)/i.test(event?.type ?? '') ? 'error' : null
-  }
-}
-
-/**
- * Full body of one event. Shared by the projection (which stores a preview) and
- * the on-demand loader (which returns the whole text), so both read the same
- * fields instead of keeping two parsers in step.
- */
-function eventBody(event) {
-  switch (event?.type) {
-    case 'user/message': return contentText(event.data?.content)
-    case 'assistant/message': return contentText(event.data?.message?.content)
-    case 'todo/write': return Array.isArray(event.data?.todos) ? event.data.todos.map(todo => `[${todo.status}] ${todo.content}`).join('\n') : ''
-    case 'turn/end': {
-      const reason = event.data?.reason
-      if (reason?.kind === 'error') return errorText(reason.error) ?? '本轮执行失败'
-      return '本轮已取消'
-    }
-    default:
-      return eventKind(event) === 'error' ? errorText(event.data?.error ?? event.data?.reason ?? event.data) ?? 'Harness 运行失败' : ''
-  }
-}
-
 function projectableEvent(event) {
-  const kind = eventKind(event)
-  if (kind === null) return null
-  const text = eventBody(event)
-  if (kind === 'user' && (isInjectedUserSource(event.data?.source) || isRuntimeContextText(text))) return null
-  return noteProjection(kind, text)
+  const normalized = normalizeDshEvent(event)
+  if (normalized === null) return null
+  return noteProjection(normalized.kind, normalized.text)
 }
 
 /**
@@ -805,16 +757,6 @@ export function bodiesFromEvents(thread, events, seqs) {
   return messages
 }
 
-function errorText(value) {
-  if (typeof value === 'string') return value.trim() || null
-  if (value === null || value === undefined || typeof value !== 'object') return null
-  const name = typeof value.name === 'string' && value.name.trim() !== '' ? value.name.trim() : ''
-  const code = typeof value.code === 'string' && value.code.trim() !== '' ? value.code.trim() : ''
-  const message = typeof value.message === 'string' && value.message.trim() !== '' ? value.message.trim() : ''
-  if (message !== '') return [name, code].filter(Boolean).concat(message).join(': ')
-  return [name, code].filter(Boolean).join(': ') || null
-}
-
 function noteProjection(kind, text) {
   const normalized = text.trim()
   if (normalized === '') return null
@@ -826,47 +768,6 @@ function noteProjection(kind, text) {
 function excerptOf(text) {
   if (text.length <= EXCERPT_CHARS) return text
   return `${text.slice(0, EXCERPT_CHARS).trimEnd()}…`
-}
-
-function isRuntimeContextText(text) {
-  return typeof text === 'string' && text.trimStart().startsWith('Current runtime context. This snapshot supersedes earlier runtime-context snapshots.')
-}
-
-function isRuntimeContextMessage(message) {
-  return message?.kind === 'user' && isRuntimeContextText(message.text)
-}
-
-/** A harness-authored turn, identified by its structured provenance. */
-function isInjectedUserSource(source) {
-  return typeof source?.kind === 'string' && INJECTED_USER_SOURCE_KINDS.has(source.kind)
-}
-
-/**
- * Recognises a stored skill catalogue. Only the harness emits both markers
- * together, so a person quoting one of them is still kept as a real turn.
- */
-function isSkillCatalogText(text) {
-  if (typeof text !== 'string') return false
-  const head = text.trimStart()
-  return head.startsWith(SKILL_CATALOG_OPENER) && head.includes(SKILL_CATALOG_MARKER)
-}
-
-/**
- * Whether a stored message must stay out of the canvas graph: runtime
- * snapshots and skill catalogues were never a turn the user took.
- */
-function isInjectedUserMessage(message) {
-  return message?.kind === 'user' && (isRuntimeContextMessage(message) || isSkillCatalogText(message.text))
-}
-
-function contentText(content) {
-  if (!Array.isArray(content)) return ''
-  return content.flatMap(block => {
-    if (block?.type === 'text') return [block.text]
-    if (block?.type === 'tool-call') return [block.name, block.arguments]
-    if (block?.type === 'tool-result') return contentText(block.content)
-    return []
-  }).filter(value => typeof value === 'string' && value.trim() !== '').join('\n')
 }
 
 function titleFromText(text) {
