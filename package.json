@@ -24,10 +24,12 @@
     "NOTICE",
     "core",
     "adapters",
-    "preview"
+    "preview",
+    "mcp"
   ],
   "scripts": {
-    "build": "node --check index.js && node --check client.js && node --check app.js && node --check core/conversation.js && node --check adapters/dsh.js && node --check adapters/workbuddy.js && node --check preview/server.js && node --check preview/app.js",
+    "build": "node --check index.js && node --check client.js && node --check app.js && node --check core/conversation.js && node --check core/read-only-payload.js && node --check adapters/dsh.js && node --check adapters/workbuddy.js && node --check preview/server.js && node --check preview/app.js && node --check preview/view.js && node --check mcp/server.js && node --check mcp/app.js && node mcp/build-widget.js",
+    "mcp:workbuddy": "node mcp/server.js",
     "preview:workbuddy": "node preview/server.js",
     "prepare": "pnpm run build",
     "test": "node --test test/*.test.js"
@@ -50,5 +52,12 @@
       ],
       "immediately": false
     }
+  },
+  "dependencies": {
+    "@modelcontextprotocol/ext-apps": "1.7.5",
+    "@modelcontextprotocol/sdk": "1.32.2"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
   }
 }

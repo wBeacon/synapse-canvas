@@ -3,3 +3,5 @@ node_modules/
 .pack-check/
 __pycache__/
 *.py[cod]
+mcp/widget.html
+mcp/THIRD_PARTY_NOTICES.txt

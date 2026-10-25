@@ -3,12 +3,12 @@
 ## 当前依赖方向
 
 ```text
-core/conversation.js                公共事件 → 会话轮次 → 地图布局
-    ↑                 ↑
-adapters/dsh.js        adapters/workbuddy.js
-    ↑                 ↑
-index.js              preview/server.js → preview/app.js
-DSH 原有存储与宿主      本地只读预览
+adapters/dsh.js ─────────→ index.js / DSH 原有存储与宿主
+adapters/workbuddy.js ──→ preview/server.js → preview/app.js ┐
+                    └──→ mcp/server.js → mcp/app.js        ├→ preview/view.js
+                                                          ┘
+core/conversation.js        公共事件 → 会话轮次 → 地图布局
+core/read-only-payload.js   HTTP / MCP 共用的消息截断
 ```
 
 `adapters/dsh.js` 从上游 `index.js` 提取事件解读、正文读取与注入消息识别。现有 DSH 存储通过它取得事件含义，接口、存储格式和原有前端保持兼容。
@@ -16,7 +16,7 @@ DSH 适配器同时提供 `projectDshConversation`，验证 DSH 与 WorkBuddy �
 DSH 的完整存储和旧画布仍有平台专属逻辑，尚未完成整体迁移。
 
 `adapters/workbuddy.js` 负责只读索引、范围筛选、JSONL 读取、原生文本块及上下文信封转换，随后交给公共投影函数。
-`preview/` 负责提供独立的本地页面，并复用上游基础样式；视图不读取平台数据库，不解析原生日志，也不调用 DSH bridge。
+`preview/view.js` 复用上游基础样式，通过传入的读取与宿主交互接口工作。HTTP 与 MCP 分别提供传输适配；视图不读取平台数据库、不解析原生日志，也不调用 DSH bridge。
 
 ## 公共模型
 
@@ -47,8 +47,8 @@ DSH 原有画布继续保留原生 fork 行为。
 
 ## 数据与运行边界
 
-公共模型只存在于内存中，本轮没有新增会话数据库，也不修改 WorkBuddy 的数据。
+公共模型只存在于内存中，没有新增会话数据库，也不直接修改 WorkBuddy 的历史存储。
 只读预览的能力声明全部关闭会话写操作，服务端也拒绝写请求。
 HTTP 列表使用短正文，详情按需读取更完整的消息；原生工具参数和推理正文未进入公共模型。
 
-下一步可以基于这个边界单独验证 WorkBuddy 的写操作、原生分叉和界面嵌入，或接入 CodeBuddy；无需提前实现全部平台的通用运行时。
+MCP App 嵌入已实际跑通。用户点击可将问答引用发送到承载画布的当前任务；它是宿主交互能力，与源会话的 `send` / `fork` 能力分开。当前源会话仍只读，详见[嵌入验证](workbuddy-embedding.md)。下一步继续验证指定源会话写操作与原生分叉，或单独接入 CodeBuddy。

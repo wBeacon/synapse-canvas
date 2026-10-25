@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "synapse-canvas": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "/absolute/path/to/synapse-canvas/mcp/server.js",
+        "--marker",
+        "SYNAPSE_CANVAS_PROBE_20261025"
+      ]
+    }
+  }
+}

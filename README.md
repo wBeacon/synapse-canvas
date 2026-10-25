@@ -16,9 +16,17 @@ Synapse Canvas 是独立维护的衍生项目，保留上游提交历史和 MIT 
 
 ## 当前状态
 
-当前包含上游 DSH 插件和首版 **WorkBuddy 本地会话只读地图**。已开始提取公共会话模型与平台事件适配边界；CodeBuddy 尚未接入，WorkBuddy 的消息发送、原生分叉及应用内嵌入尚未支持。
+当前包含上游 DSH 插件、**WorkBuddy 本地会话只读地图**及可在 WorkBuddy 任务中加载的 **MCP App**。已开始提取公共会话模型与平台事件适配边界。内嵌画布可发送所选问答引用到当前任务；向选定源会话追问、原生分叉及 CodeBuddy 接入尚未完成。
 
 现有包配置仍使用上游名称 `dsh-synapse`，独立包名和发布流程将在后续开发中调整。
+
+## WorkBuddy 内嵌画布
+
+已在 macOS WorkBuddy 5.9.2 企业版验证。安装依赖并构建后，将 [MCP 配置示例](mcp/config.example.json)中的路径改为本机绝对路径，在 WorkBuddy 自定义连接器中保存、信任并启用，然后调用 `show_canvas`。
+
+详细步骤及能力边界见[应用内嵌入说明](docs/workbuddy-embedding.md)。
+
+![WorkBuddy 任务中的内嵌画布](docs/images/workbuddy-embedded-preview.png)
 
 ## WorkBuddy 只读地图
 
@@ -56,6 +64,7 @@ corepack pnpm test
 
 - [WorkBuddy 首轮能力验证](docs/workbuddy-validation.md)
 - [WorkBuddy 只读地图使用说明](docs/workbuddy-preview.md)
+- [WorkBuddy 应用内嵌入与交互验证](docs/workbuddy-embedding.md)
 - [公共模型与适配边界](docs/multi-harness-architecture.md)
 
 ## 许可证

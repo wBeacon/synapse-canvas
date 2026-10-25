@@ -1,7 +1,7 @@
 # WorkBuddy 只读地图
 
 首版原型已使用 macOS WorkBuddy 5.9.2 企业版的真实测试会话验证。
-它在独立的本地浏览器页面显示历史，尚未作为 WorkBuddy 内嵌插件提供。
+本页介绍独立的本地浏览器预览。应用内 MCP App 已另行验证，见[嵌入说明](workbuddy-embedding.md)。
 
 ## 启动
 
@@ -61,7 +61,7 @@ npm run preview:workbuddy -- --home /path/to/workbuddy --marker MY_TEST --port 0
 接口只接受 GET，响应不缓存；会话内容只在进程和本地页面中使用，不写入仓库、导出文件或 WorkBuddy 存储。
 访问令牌保存在该标签页的 sessionStorage 中以支持刷新。工具参数、工具结果正文、推理正文和运行时来源信封不发送到页面。
 
-消息发送、会话创建、归档、原生分叉、原生跳转和 WorkBuddy 内嵌画布均未接入。
+独立预览不提供消息发送、会话创建、归档、原生分叉或原生跳转。MCP App 的当前任务引用发送属于独立宿主能力，见[嵌入说明](workbuddy-embedding.md)。
 
 ## 验证
 

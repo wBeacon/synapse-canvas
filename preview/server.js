@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { compactSession } from '../core/read-only-payload.js'
 import { createServer } from 'node:http'
 import { randomBytes, timingSafeEqual } from 'node:crypto'
 import { readFile } from 'node:fs/promises'
@@ -7,20 +8,11 @@ import { resolve } from 'node:path'
 import { parseArgs } from 'node:util'
 import { WorkBuddyReader } from '../adapters/workbuddy.js'
 
-function compactSession(session, limit) {
-  const compact = event => event == null ? event : {
-    ...event, text: event.text?.slice(0, limit), truncated: event.text?.length > limit,
-  }
-  return { ...session, turns: session.turns.map(turn => ({
-    ...turn, question: compact(turn.question), answer: compact(turn.answer), error: compact(turn.error),
-    answers: limit > 2000 ? turn.answers.map(compact) : [],
-  })) }
-}
-
 export function createPreviewServer({ reader, token = randomBytes(32).toString('hex') }) {
   const files = new Map([
     ['/', ['index.html', 'text/html']],
     ['/app.js', ['app.js', 'text/javascript']],
+    ['/view.js', ['view.js', 'text/javascript']],
     ['/preview.css', ['preview.css', 'text/css']],
     ['/styles.css', ['../styles.css', 'text/css']],
     ['/core/conversation.js', ['../core/conversation.js', 'text/javascript']],
