@@ -48,7 +48,7 @@ export function mountPreview(transport) {
         <div class="thread-card-head" data-drag="${escape(card.id)}"><span class="topic-dot"></span><strong title="${escape(turn.question.text)}">${escape(turn.question.text)}</strong></div>
         <div class="thread-meta"><span>第 ${order} 轮</span><span>${escape(session.workspace.title)}</span>${turn.tools.length ? `<span class="card-process-count">工具 ${turn.tools.length}</span>` : ''}</div>
         <div class="thread-answer">${escape(answer)}${turn.answer?.truncated ? '\n…详情查看全文' : ''}</div>
-        <footer><span>WorkBuddy · 已保存记录</span><button data-detail="${escape(card.id)}">查看详情</button></footer>
+        <footer><span>${escape(transport.sourceLabel ?? 'WorkBuddy · 已保存记录')}</span><button data-detail="${escape(card.id)}">查看详情</button></footer>
       </article>`
     }).join('')
     for (const card of document.querySelectorAll('.thread-card')) card.querySelector('.thread-answer').scrollTop = scrolls.get(card.dataset.card) ?? 0

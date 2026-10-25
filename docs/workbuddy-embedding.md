@@ -69,4 +69,4 @@ pnpm run build
 - WorkBuddy 的公开[插件说明](https://www.codebuddy.cn/docs/workbuddy/From-Beginner-to-Expert-Guide/Function-Description/Plug-In)列出 Skills、MCP、快捷指令、Hooks、Agents，未列出注册自定义导航页面的组件。按[连接器规范](https://open.workbuddy.cn/docs/connector)打包可以改善分发与安装，不能据此承诺常驻界面。
 - [Buddy 应用文档](https://open.workbuddy.cn/docs/buddy-app)提供行业工作台配置及 MCP Apps 集成，但尚未确认可注册任意自定义常驻画布。它不等同于普通本地插件安装。
 - 本机内置扩展清单确有 `extension.json`、`ui.entry`，部分页面含 `keepAlive`。安装包运行时代码还包含 `.wbext` 分发、完整性验证和受信任签名检查。这些是对当前版本的只读静态观察，未证明第三方开发者拥有同样的接入权限或支持契约；没有修改安装包、签名校验或运行配置。
-- 下一步应向 WorkBuddy 官方确认第三方 UI Extension SDK、独立导航入口、跨任务生命周期、本地开发加载方式，以及 `.wbext` 签名与分发渠道。获得可用契约后再做最小常驻页面实验；不能将 MCP 插件安装成功当作此项验收通过。
+- 后续调查已找到企业自建菜单的公开路径，并从官方网页示例核对 Buddy 菜单资源包格式；已准备合成数据验证包。具体证据、文档版本差异及待验证条件见[独立画布入口验证](workbuddy-persistent-ui.md)。当前尚未完成侧栏安装或常驻验收。

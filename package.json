@@ -32,7 +32,8 @@
     "mcp:workbuddy": "node mcp/server.js",
     "preview:workbuddy": "node preview/server.js",
     "prepare": "pnpm run build",
-    "test": "node --test test/*.test.js"
+    "test": "node --test test/*.test.js",
+    "buddy:package": "node buddy/build-page.js && python3 tools/package_buddy_page.py"
   },
   "engines": {
     "node": ">=22.19.0"

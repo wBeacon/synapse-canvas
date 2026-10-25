@@ -26,6 +26,8 @@ Synapse Canvas 是独立维护的衍生项目，保留上游提交历史和 MIT 
 
 详细步骤及能力边界见[应用内嵌入说明](docs/workbuddy-embedding.md)。
 
+应用级独立入口仍在验证中：已准备 Buddy 菜单的合成数据网页包，使用 `pnpm run buddy:package` 构建；尚未注册到宿主侧栏。安装条件和验收项见[独立画布入口验证](docs/workbuddy-persistent-ui.md)。
+
 ![WorkBuddy 任务中的内嵌画布](docs/images/workbuddy-embedded-preview.png)
 
 ## WorkBuddy 只读地图
